@@ -1,10 +1,10 @@
-import { useRef, useEffect } from 'react';
+import { useRef } from 'react';
 
 const App = () => {
   let video = useRef(null);
   let canvas = useRef(null);
 
-  useEffect(() => {
+  const openCam = () => {
     navigator.mediaDevices
       .getUserMedia({ video: { width: 1280, heigth: 720 } })
       .then((capture) => {
@@ -26,10 +26,23 @@ const App = () => {
         }, 100);
       })
       .catch((err) => console.log(err));
-  }, []);
+  };
+
+  const closeCam = () => {
+    const stream = video.current.srcObject;
+    const tracks = stream.getTracks();
+
+    tracks.forEach(function (track) {
+      track.stop();
+    });
+
+    video.srcObject = null;
+  };
 
   return (
     <>
+      <button onClick={openCam}>Open Camera</button>
+      <button onClick={closeCam}>Close Camera</button>
       <video ref={video} autoPlay muted hidden />
       <canvas ref={canvas} />
     </>

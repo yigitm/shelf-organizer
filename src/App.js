@@ -1,8 +1,9 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 const App = () => {
-  let video = useRef(null);
-  let canvas = useRef(null);
+  const video = useRef(null);
+  const canvas = useRef(null);
+  const [barcode, setBarcode] = useState(null);
 
   const openCam = () => {
     navigator.mediaDevices
@@ -12,6 +13,24 @@ const App = () => {
         video.current.play();
 
         const captureContent = canvas.current.getContext('2d');
+        const barcodeTypes = new window.BarcodeDetector({
+          formats: [
+            'aztec',
+            'code_128',
+            'code_39',
+            'code_93',
+            'codabar',
+            'data_matrix',
+            'ean_13',
+            'ean_8',
+            'itf',
+            'pdf417',
+            'qr_code',
+            'upc_a',
+            'upc_e',
+            'unknown',
+          ],
+        });
 
         setInterval(() => {
           canvas.current.width = video.current.videoWidth;
@@ -23,6 +42,14 @@ const App = () => {
             video.current.videoWidth,
             video.current.videoHeight,
           );
+          barcodeTypes
+            .detect(canvas.current)
+            .then(([data]) => {
+              if (data) {
+                setBarcode(data.rawValue);
+              }
+            })
+            .catch((err) => console.log(err));
         }, 100);
       })
       .catch((err) => console.log(err));
@@ -37,6 +64,7 @@ const App = () => {
     });
 
     video.srcObject = null;
+    setBarcode(null);
   };
 
   return (
@@ -45,6 +73,7 @@ const App = () => {
       <button onClick={closeCam}>Close Camera</button>
       <video ref={video} autoPlay muted hidden />
       <canvas ref={canvas} />
+      {barcode && <div>Barcode Number: {barcode}</div>}
     </>
   );
 };

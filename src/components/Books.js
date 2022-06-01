@@ -7,10 +7,15 @@ const Books = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (book.length === 0) dispatch(getBook);
+    if (book.status === undefined) dispatch(getBook);
   });
 
-  return <h1>'test'</h1>;
+  return (
+    <div>
+      <h1>{book.status ? book.result.title : null}</h1>
+      <h1>{book.status ? book.result.author : null}</h1>
+    </div>
+  );
 };
 
 export default Books;

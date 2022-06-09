@@ -15,7 +15,7 @@ const Barcode = () => {
     if (barcode !== null) {
       dispatch(getBook);
     }
-  }, [barcode]);
+  }, [barcode, dispatch]);
 
   const openCam = () => {
     navigator.mediaDevices

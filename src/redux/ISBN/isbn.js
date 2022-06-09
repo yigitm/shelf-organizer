@@ -1,5 +1,3 @@
-import { act } from '@testing-library/react';
-
 const GET_BOOK = 'shelf-organizer/ISBN/isbn/GET_BOOK';
 const baseURL = 'https://api.orhanaydogdu.com.tr/isbn/index.php?isbn=';
 let initialState = [];

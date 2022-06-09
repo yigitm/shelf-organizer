@@ -1,9 +1,21 @@
 import { useRef, useState } from 'react';
+import { useEffect } from 'react';
+import { getBook, setIsbn } from '../redux/ISBN/isbn';
+import { useDispatch } from 'react-redux';
+import Books from './Books';
 
 const Barcode = () => {
   const video = useRef(null);
   const canvas = useRef(null);
   const [barcode, setBarcode] = useState(null);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    setIsbn(barcode);
+    if (barcode !== null) {
+      dispatch(getBook);
+    }
+  }, [barcode]);
 
   const openCam = () => {
     navigator.mediaDevices
@@ -73,6 +85,7 @@ const Barcode = () => {
       <video ref={video} autoPlay muted hidden />
       <canvas ref={canvas} />
       {barcode && <div>Barcode Number: {barcode}</div>}
+      <Books />
     </>
   );
 };

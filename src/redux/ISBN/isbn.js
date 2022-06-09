@@ -1,7 +1,13 @@
+import { act } from '@testing-library/react';
+
 const GET_BOOK = 'shelf-organizer/ISBN/isbn/GET_BOOK';
 const baseURL = 'https://api.orhanaydogdu.com.tr/isbn/index.php?isbn=';
-let isbn = '9789750740817';
 let initialState = [];
+let isbn = '';
+
+export const setIsbn = (barcode) => {
+  isbn = barcode;
+};
 
 export const getBook = async (dispatch) => {
   const response = await fetch(baseURL + isbn);
@@ -12,7 +18,7 @@ export const getBook = async (dispatch) => {
 const isbnReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_BOOK:
-      return action.payload;
+      return Object.assign(action.payload);
     default:
       return state;
   }

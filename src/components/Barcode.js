@@ -1,12 +1,13 @@
 import { useRef, useState } from 'react';
 import { useEffect } from 'react';
 import { getBook, setIsbn } from '../redux/ISBN/isbn';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Books from './Books';
 
 const Barcode = () => {
   const video = useRef(null);
   const canvas = useRef(null);
+  const book = useSelector((state) => state.isbnReducer);
   const [barcode, setBarcode] = useState(null);
   const dispatch = useDispatch();
 
@@ -19,7 +20,7 @@ const Barcode = () => {
 
   const openCam = () => {
     navigator.mediaDevices
-      .getUserMedia({ video: { width: 1280, heigth: 720 } })
+      .getUserMedia({ video: { width: 500, heigth: 500 } })
       .then((capture) => {
         video.current.srcObject = capture;
         video.current.play();
@@ -84,8 +85,8 @@ const Barcode = () => {
       <button onClick={closeCam}>Close Camera</button>
       <video ref={video} autoPlay muted hidden />
       <canvas ref={canvas} />
-      {barcode && <div>Barcode Number: {barcode}</div>}
-      <Books />
+      {<div>Barcode Number: {barcode}</div>}
+      <p>{book.status ? book.result.title : null}</p>
     </>
   );
 };
